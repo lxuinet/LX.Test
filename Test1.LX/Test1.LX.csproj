@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <ApplicationIcon />
+    <StartupObject />
+  </PropertyGroup>
+
+  <Import Project="..\Test1\Test1.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <PackageReference Include="LXUI.Desktop" Version="1.6.2" />
+  </ItemGroup>
+
+</Project>
