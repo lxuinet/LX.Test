@@ -10,7 +10,7 @@
   <Import Project="..\Test2\Test2.projitems" Label="Shared" />
 
   <ItemGroup>
-    <PackageReference Include="LXUI.Desktop" Version="1.6.2" />
+    <PackageReference Include="LXUI.Desktop" Version="1.6.3" />
   </ItemGroup>
 
 </Project>
