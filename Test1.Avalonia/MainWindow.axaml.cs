@@ -51,5 +51,11 @@ namespace Test1.Avalonia
                 panel.Children.Add(button);
             }
         }
+
+        protected override void OnOpened(EventArgs e)
+        {
+            Title += " Launch duration: " + (DateTime.UtcNow - Program.StartDate).ToString("c");
+            base.OnOpened(e);
+        }
     }
 }

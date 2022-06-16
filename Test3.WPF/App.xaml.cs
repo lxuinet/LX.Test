@@ -13,5 +13,11 @@ namespace Test3.WPF
     /// </summary>
     public partial class App : Application
     {
+        public static DateTime StartDate;
+
+        static App()
+        {
+            StartDate = DateTime.UtcNow;
+        }
     }
 }

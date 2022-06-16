@@ -52,5 +52,11 @@ namespace Test1.WPF
                 panel.Children.Add(button);
             }
         }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            Title += " Launch duration: " + (DateTime.UtcNow - App.StartDate).ToString("c");
+            base.OnActivated(e);
+        }
     }
 }

@@ -33,5 +33,11 @@ namespace Test3.WPF
             text.TextAlignment = TextAlignment.Right;
             scrollViewer.Content = text;
         }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            Title += " Launch duration: " + (DateTime.UtcNow - App.StartDate).ToString("c");
+            base.OnActivated(e);
+        }
     }
 }

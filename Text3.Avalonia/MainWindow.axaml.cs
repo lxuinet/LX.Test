@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Media;
-
+using System;
 using Test3;
 
 namespace Text3.Avalonia
@@ -19,6 +19,12 @@ namespace Text3.Avalonia
             text.TextWrapping = TextWrapping.Wrap;
             text.TextAlignment = TextAlignment.Right;
             scrollViewer.Content = text;
+        }
+
+        protected override void OnOpened(EventArgs e)
+        {
+            Title += " Launch duration: " + (DateTime.UtcNow - Program.StartDate).ToString("c");
+            base.OnOpened(e);
         }
     }
 }
