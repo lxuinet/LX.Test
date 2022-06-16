@@ -1,46 +1,50 @@
 using System;
-
-using Avalonia.Controls;
-using Avalonia.Media.Imaging;
-using Avalonia.Media;
-using Avalonia.Threading;
-using System.Diagnostics;
-using System.Threading;
 using System.IO;
 using System.Linq;
+
+using Avalonia.Controls;
+using Avalonia.Controls.Templates;
+using Avalonia.Data;
+using Avalonia.Media.Imaging;
+using Avalonia.Media;
+using Avalonia.Layout;
+using System.Collections.Generic;
 
 namespace Test2.Avalonia
 {
     public partial class MainWindow : Window
     {
-        private Bitmap source;
         public MainWindow()
         {
             InitializeComponent();
 
-            var viewer = new ScrollViewer();
-            Content = viewer;
+            var scrollViewer = new ScrollViewer();
+            Content = scrollViewer;
 
-            var panel = new WrapPanel();
-            viewer.Content = panel;
-
-            var list = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "png-256", "*.png").Select(file => new Bitmap(file)).ToList();
-
-            for (int i = 0; i < 100; i++)
+            var itemsRepeater = new ItemsRepeater()
             {
-                list.ForEach(source =>
+                Layout = new WrapLayout()
+            };
+            scrollViewer.Content = itemsRepeater;
+
+            var images = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "png-256", "*.png").Select(file => new Bitmap(file)).ToArray();
+            var source = new List<Bitmap>(images.Length * 1000);
+            for (int i = 0; i < 1000; i++)
+            {
+                foreach (var image in images)
                 {
-                    var image = new Image();
-                    image.Source = source;
-                    image.Stretch = Stretch.Uniform;
-                    image.Width = 128;
-                    image.Height = 128;
-                    panel.Children.Add(image);
-                });
+                    source.Add(image);
+                }
             }
+            itemsRepeater.Items = source;
 
+            itemsRepeater.ItemTemplate = new FuncDataTemplate<Bitmap>((source, _) => new Image
+            {
+                [!Image.SourceProperty] = new Binding("."),
+                Stretch = Stretch.Uniform,
+                Width = 128,
+                Height = 128
+            });
         }
-
-        
     }
 }
