@@ -34,5 +34,11 @@ namespace Test1.LX
             }
 
         }
+
+        protected override void DoShow()
+        {
+            Window.Title += " Launch duration: " + (DateTime.UtcNow - Program.StartDate).ToString("c");
+            base.DoShow();
+        }
     }
 }

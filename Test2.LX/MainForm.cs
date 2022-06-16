@@ -28,7 +28,12 @@ namespace Test2.LX
                     image.Height = 128;
                 });
             }
+        }
 
+        protected override void DoShow()
+        {
+            Window.Title += " Launch duration: " + (DateTime.UtcNow - Program.StartDate).ToString("c");
+            base.DoShow();
         }
     }
 }
