@@ -1,46 +1,41 @@
 using System;
-
-using Avalonia.Controls;
-using Avalonia.Media.Imaging;
-using Avalonia.Media;
-using Avalonia.Threading;
-using System.Diagnostics;
-using System.Threading;
 using System.IO;
 using System.Linq;
+
+using Avalonia.Controls;
+using Avalonia.Controls.Templates;
+using Avalonia.Data;
+using Avalonia.Media.Imaging;
+using Avalonia.Media;
+using Avalonia.Layout;
 
 namespace Test2.Avalonia
 {
     public partial class MainWindow : Window
     {
-        private Bitmap source;
         public MainWindow()
         {
             InitializeComponent();
 
-            var viewer = new ScrollViewer();
-            Content = viewer;
+            var scrollViewer = new ScrollViewer();
+            Content = scrollViewer;
 
-            var panel = new WrapPanel();
-            viewer.Content = panel;
-
-            var list = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "png-256", "*.png").Select(file => new Bitmap(file)).ToList();
-
-            for (int i = 0; i < 100; i++)
+            var itemsRepeater = new ItemsRepeater()
             {
-                list.ForEach(source =>
-                {
-                    var image = new Image();
-                    image.Source = source;
-                    image.Stretch = Stretch.Uniform;
-                    image.Width = 128;
-                    image.Height = 128;
-                    panel.Children.Add(image);
-                });
-            }
+                Layout = new WrapLayout()
+            };
+            scrollViewer.Content = itemsRepeater;
 
+            itemsRepeater.Items = Enumerable.Range(0, 100).SelectMany(_ =>
+                Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory + "png-256", "*.png").Select(file => new Bitmap(file))).ToArray();
+
+            itemsRepeater.ItemTemplate = new FuncDataTemplate<Bitmap>((source, _) => new Image
+            {
+                [!Image.SourceProperty] = new Binding("."),
+                Stretch = Stretch.Uniform,
+                Width = 128,
+                Height = 128
+            });
         }
-
-        
     }
 }

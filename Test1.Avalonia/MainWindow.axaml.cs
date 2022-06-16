@@ -1,10 +1,13 @@
 using System;
+using System.Linq;
 
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Templates;
+using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media.Imaging;
 using Avalonia.Media;
-using Avalonia;
 
 namespace Test1.Avalonia
 {
@@ -15,41 +18,42 @@ namespace Test1.Avalonia
             InitializeComponent();
 
             var scrollViewer = new ScrollViewer();
-            this.Content = scrollViewer;
+            Content = scrollViewer;
 
-            var panel = new StackPanel();
-            scrollViewer.Content = panel;
+            var itemsRepeater = new ItemsRepeater();
+            scrollViewer.Content = itemsRepeater;
 
             var source = new Bitmap(AppDomain.CurrentDomain.BaseDirectory + "test.png");
 
-
-            for (int i = 0; i < 10000; i++)
+            itemsRepeater.Items = Enumerable.Range(0, 10000);
+            itemsRepeater.ItemTemplate = new FuncDataTemplate<int>((item, _) => new Button
             {
-                var button = new Button();
-                button.Margin = new Thickness(0, 0, 0, 8);
-                button.HorizontalAlignment = HorizontalAlignment.Center;
+                Margin = new Thickness(0, 0, 0, 8),
+                HorizontalAlignment = HorizontalAlignment.Center,
 
-                var buttonStack = new StackPanel();
-                button.Content = buttonStack;
-
-                var label1 = new Label();
-                label1.HorizontalAlignment = HorizontalAlignment.Right;
-                label1.Content = "Top " + i.ToString();
-                buttonStack.Children.Add(label1);
-
-                var image1 = new Image();
-                image1.Source = source;
-                image1.Stretch = Stretch.None;
-                image1.HorizontalAlignment = HorizontalAlignment.Stretch;
-                buttonStack.Children.Add(image1);
-
-                var label2 = new Label();
-                label2.HorizontalAlignment = HorizontalAlignment.Left;
-                label2.Content = "Bottom " + i.ToString();
-                buttonStack.Children.Add(label2);
-
-                panel.Children.Add(button);
-            }
+                Content = new StackPanel
+                {
+                    Children =
+                    {
+                        new Label
+                        {
+                            HorizontalAlignment = HorizontalAlignment.Right,
+                            [!ContentProperty] = new Binding(".") { StringFormat = "Top {0}" }
+                        },
+                        new Image
+                        {
+                            Source = source,
+                            Stretch = Stretch.None,
+                            HorizontalAlignment = HorizontalAlignment.Stretch
+                        },
+                        new Label
+                        {
+                            HorizontalAlignment = HorizontalAlignment.Left,
+                            [!ContentProperty] = new Binding(".") { StringFormat = "Bottom {0}" }
+                        }
+                    }
+                }
+            });
         }
     }
 }
